@@ -1,6 +1,6 @@
-# Facebook Messenger Chatbot 🤖
+# Facebook Messenger & Zalo OA Chatbot 🤖
 
-Ứng dụng Node.js đơn giản để tạo Facebook Messenger chatbot có thể phản hồi tin nhắn tự động.
+Ứng dụng Node.js đa nền tảng hỗ trợ cả Facebook Messenger và Zalo OA, có thể phản hồi tin nhắn tự động.
 
 ## 📋 Yêu cầu
 
@@ -18,8 +18,12 @@
 
 3. **Tạo file `.env` với nội dung:**
    ```env
+   # Facebook Messenger
    PAGE_TOKEN=your_page_access_token_here
    VERIFY_TOKEN=your_verify_token_here
+   
+   # Zalo OA (tùy chọn)
+   ZALO_OA_ACCESS_TOKEN=your_zalo_oa_access_token_here
    ```
 
 ## 🔧 Cấu hình Facebook Developer
@@ -78,14 +82,22 @@ Server sẽ chạy tại: `http://localhost:3000`
 
 ## 🔍 Endpoints
 
-- `GET /` - Kiểm tra bot hoạt động
+- `GET /` - Trang chủ với thông tin bot
 - `GET /webhook` - Xác minh webhook từ Facebook
-- `POST /webhook` - Nhận tin nhắn từ Facebook
+- `POST /webhook` - Nhận tin nhắn từ Facebook & Zalo
+- `GET /healthz` - Health check cho Render
+- `GET /zalo-verification.html` - Xác minh domain Zalo
 
 ## 🧪 Test chatbot
 
+**Facebook Messenger:**
 1. Gửi tin nhắn đến Facebook Page
 2. Bot sẽ phản hồi: "Bạn vừa nói: [tin nhắn của bạn]"
+
+**Zalo OA:**
+1. Theo dõi Zalo OA → Nhận tin chào mừng
+2. Gửi tin nhắn → Bot phản hồi tự động
+3. Hỗ trợ sự kiện: `user_send_text`, `follow`, `unfollow`
 
 ## 🛠️ Tùy chỉnh
 

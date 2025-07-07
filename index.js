@@ -49,7 +49,7 @@ app.get('/webhook', (req, res) => {
 // Webhook để nhận tin nhắn - POST request từ Facebook/Zalo
 app.post('/webhook', (req, res) => {
   const body = req.body;
-  console.log('📩 Webhook received:', body);
+  console.log('📩 Webhook received:', JSON.stringify(body, null, 2));
 
   // Xử lý webhook từ Facebook Messenger
   if (body.object === 'page') {
@@ -71,14 +71,12 @@ app.post('/webhook', (req, res) => {
   } 
   // Xử lý webhook từ Zalo OA
   else {
-    console.log('📱 Zalo webhook received:', body);
+    console.log('📱 Sự kiện từ ZALO:', JSON.stringify(body, null, 2));
     
-    // Có thể xử lý tin nhắn Zalo ở đây trong tương lai
-    // if (body.event_name === 'user_send_text') {
-    //   handleZaloMessage(body);
-    // }
+    // Xử lý các sự kiện Zalo
+    handleZaloWebhook(body);
     
-    // Bắt buộc trả về 200 OK để Zalo chấp nhận webhook
+    // BẮT BUỘC: Trả về 200 OK để webhook không lỗi
     res.sendStatus(200);
   }
 });
@@ -106,6 +104,58 @@ function handleMessage(senderId, receivedMessage) {
   callSendAPI(senderId, response);
 }
 
+// Xử lý các sự kiện từ Zalo OA
+function handleZaloWebhook(data) {
+  if (data.event_name === 'user_send_text') {
+    const userId = data.sender.id;
+    const message = data.message.text;
+    console.log(`✉️ Người dùng Zalo (${userId}) gửi: ${message}`);
+    
+    // Tự động phản hồi tin nhắn
+    replyZaloMessage(userId, `Bạn vừa nói: "${message}" 💬`);
+    
+  } else if (data.event_name === 'follow') {
+    const userId = data.follower.id;
+    console.log(`👋 Người dùng mới theo dõi OA: ${userId}`);
+    
+    // Chào mừng người dùng mới
+    replyZaloMessage(userId, 'Chào mừng bạn đến với chatbot! 🤖 Hãy gửi tin nhắn để tôi phản hồi nhé!');
+    
+  } else if (data.event_name === 'unfollow') {
+    const userId = data.follower.id;
+    console.log(`👋 Người dùng hủy theo dõi OA: ${userId}`);
+    
+  } else {
+    console.log(`📋 Sự kiện Zalo khác: ${data.event_name}`);
+  }
+}
+
+// Gửi tin nhắn phản hồi qua Zalo OA API
+async function replyZaloMessage(userId, text) {
+  const OA_ACCESS_TOKEN = process.env.ZALO_OA_ACCESS_TOKEN;
+  
+  if (!OA_ACCESS_TOKEN) {
+    console.log('⚠️ Chưa cấu hình ZALO_OA_ACCESS_TOKEN trong .env');
+    return;
+  }
+
+  try {
+    const response = await axios.post('https://openapi.zalo.me/v3.0/oa/message', {
+      recipient: { user_id: userId },
+      message: { text: text }
+    }, {
+      headers: {
+        'access_token': OA_ACCESS_TOKEN,
+        'Content-Type': 'application/json'
+      }
+    });
+    
+    console.log('✅ Zalo message sent successfully!');
+  } catch (error) {
+    console.error('❌ Error sending Zalo message:', error.response?.data || error.message);
+  }
+}
+
 // Gửi tin nhắn qua Facebook Send API
 function callSendAPI(senderId, response) {
   const requestBody = {
@@ -125,10 +175,10 @@ function callSendAPI(senderId, response) {
     }
   })
   .then(response => {
-    console.log('✅ Message sent successfully!');
+    console.log('✅ Facebook message sent successfully!');
   })
   .catch(error => {
-    console.error('❌ Error sending message:', error.response?.data || error.message);
+    console.error('❌ Error sending Facebook message:', error.response?.data || error.message);
   });
 }
 
@@ -137,6 +187,8 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server is running on port ${PORT}`);
   console.log(`📱 Webhook URL: https://chatai-bot.onrender.com/webhook`);
   console.log(`🔗 Health check: https://chatai-bot.onrender.com/healthz`);
+  console.log(`🎯 Hỗ trợ: Facebook Messenger + Zalo OA`);
+  console.log(`⚡ Sự kiện Zalo: user_send_text, follow, unfollow`);
 });
 
 // Xử lý lỗi không mong muốn
