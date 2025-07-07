@@ -46,16 +46,17 @@ app.get('/webhook', (req, res) => {
   }
 });
 
-// Webhook để nhận tin nhắn - POST request từ Facebook
+// Webhook để nhận tin nhắn - POST request từ Facebook/Zalo
 app.post('/webhook', (req, res) => {
   const body = req.body;
+  console.log('📩 Webhook received:', body);
 
-  // Kiểm tra đây có phải là page event không
+  // Xử lý webhook từ Facebook Messenger
   if (body.object === 'page') {
     body.entry.forEach(entry => {
       // Lấy webhook event
       const webhookEvent = entry.messaging[0];
-      console.log('📨 Received webhook event:', webhookEvent);
+      console.log('📨 Facebook webhook event:', webhookEvent);
 
       // Lấy sender ID
       const senderId = webhookEvent.sender.id;
@@ -67,8 +68,18 @@ app.post('/webhook', (req, res) => {
     });
 
     res.status(200).send('EVENT_RECEIVED');
-  } else {
-    res.sendStatus(404);
+  } 
+  // Xử lý webhook từ Zalo OA
+  else {
+    console.log('📱 Zalo webhook received:', body);
+    
+    // Có thể xử lý tin nhắn Zalo ở đây trong tương lai
+    // if (body.event_name === 'user_send_text') {
+    //   handleZaloMessage(body);
+    // }
+    
+    // Bắt buộc trả về 200 OK để Zalo chấp nhận webhook
+    res.sendStatus(200);
   }
 });
 
