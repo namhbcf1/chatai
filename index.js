@@ -4,7 +4,7 @@ const axios = require('axios');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000; // Render yêu cầu sử dụng process.env.PORT
 
 // Middleware
 app.use(bodyParser.json());
@@ -13,6 +13,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Endpoint kiểm tra bot hoạt động
 app.get('/', (req, res) => {
   res.send('Bot is live! 🤖');
+});
+
+// Health check endpoint cho Render
+app.get('/healthz', (req, res) => {
+  res.status(200).send('OK');
 });
 
 // Webhook verification - GET request từ Facebook
@@ -107,10 +112,10 @@ function callSendAPI(senderId, response) {
 }
 
 // Khởi động server
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server is running on port ${PORT}`);
-  console.log(`📱 Webhook URL: http://localhost:${PORT}/webhook`);
-  console.log(`🔗 Health check: http://localhost:${PORT}/`);
+  console.log(`📱 Webhook URL: https://chatai-bot.onrender.com/webhook`);
+  console.log(`🔗 Health check: https://chatai-bot.onrender.com/healthz`);
 });
 
 // Xử lý lỗi không mong muốn
