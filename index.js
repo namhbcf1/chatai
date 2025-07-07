@@ -14,10 +14,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Phục vụ file tĩnh từ thư mục public (cho Zalo verification)
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Endpoint kiểm tra bot hoạt động
-app.get('/', (req, res) => {
-  res.send('Bot is live! 🤖');
-});
+// Endpoint kiểm tra bot hoạt động - sẽ phục vụ file index.html từ thư mục public
+// app.get('/', (req, res) => {
+//   res.send('Bot is live! 🤖');
+// });
 
 // Health check endpoint cho Render
 app.get('/healthz', (req, res) => {

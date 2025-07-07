@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="zalo-platform-site-verification" content="JSQZ9QZeDYvImemKfBmi5dETl0cVwsfUD3Cs" />
+    <title>Facebook Messenger Chatbot</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .container {
+        text-align: center;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 40px;
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      }
+      h1 {
+        font-size: 2.5em;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+      .status {
+        font-size: 1.2em;
+        margin: 20px 0;
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        border-left: 4px solid #4CAF50;
+      }
+      .endpoints {
+        margin-top: 30px;
+        text-align: left;
+      }
+      .endpoint {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 10px 15px;
+        margin: 10px 0;
+        border-radius: 8px;
+        font-family: monospace;
+        font-size: 0.9em;
+      }
+      .emoji {
+        font-size: 1.5em;
+        margin-right: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1><span class="emoji">🤖</span>Facebook Messenger Chatbot</h1>
+      
+      <div class="status">
+        <span class="emoji">✅</span>Bot đang hoạt động và sẵn sàng nhận tin nhắn!
+      </div>
+
+      <div class="endpoints">
+        <h3><span class="emoji">🔗</span>Endpoints có sẵn:</h3>
+        <div class="endpoint">
+          <strong>GET /</strong> - Trang chủ (bạn đang xem)
+        </div>
+        <div class="endpoint">
+          <strong>GET /webhook</strong> - Xác minh webhook Facebook
+        </div>
+        <div class="endpoint">
+          <strong>POST /webhook</strong> - Nhận tin nhắn từ Facebook
+        </div>
+        <div class="endpoint">
+          <strong>GET /healthz</strong> - Health check cho Render
+        </div>
+        <div class="endpoint">
+          <strong>GET /zalo-verification.html</strong> - Xác minh domain Zalo
+        </div>
+      </div>
+
+      <div style="margin-top: 30px; font-size: 0.9em; opacity: 0.8;">
+        <p><span class="emoji">📱</span>Để sử dụng chatbot, hãy gửi tin nhắn đến Facebook Page đã được cấu hình</p>
+        <p><span class="emoji">🔧</span>Webhook URL: <code>https://chatai-bot.onrender.com/webhook</code></p>
+      </div>
+    </div>
+  </body>
+</html> 
