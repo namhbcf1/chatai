@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios');
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
@@ -10,6 +11,9 @@ const PORT = process.env.PORT || 10000; // Render yêu cầu sử dụng process
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Phục vụ file tĩnh từ thư mục public (cho Zalo verification)
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Endpoint kiểm tra bot hoạt động
 app.get('/', (req, res) => {
   res.send('Bot is live! 🤖');
@@ -18,6 +22,12 @@ app.get('/', (req, res) => {
 // Health check endpoint cho Render
 app.get('/healthz', (req, res) => {
   res.status(200).send('OK');
+});
+
+// Endpoint xác minh domain Zalo (backup nếu file tĩnh không hoạt động)
+app.get('/zalo-verification.html', (req, res) => {
+  res.type('text/plain');
+  res.send('zalo-platform-site-verification=JSQZ9QZeDYvImemKfBmi5dETl0cVwsfUD3Cs');
 });
 
 // Webhook verification - GET request từ Facebook
